@@ -17,7 +17,6 @@ import PIL
 from PIL import Image, ImageDraw, ImageFont
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from pylab import *
-# import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 plt.rcdefaults()
 
@@ -284,7 +283,7 @@ xlabel("")
 ylabel("# of messages")
 title("Busiest times:")
 ax = plt.gca()
-# set x-axis to 0-24h, can most likely be improved(?)
+# set x-axis to 0-24h, can most likely be improved
 hours = [datetime.time(0, 0), datetime.time(1, 0), datetime.time(2, 0),
          datetime.time(3, 0), datetime.time(4, 0), datetime.time(5, 0),
          datetime.time(6, 0), datetime.time(7, 0), datetime.time(8, 0),
@@ -302,23 +301,27 @@ plt.plot(x, y, linewidth=0.5)
 fig.savefig("times.png", dpi=200)
 
 
-# TODO: Create separate file for stopwords and read in
+# TODO: Ask user to exclude stopwords
 # Create stopword list
 stopwords = set(STOPWORDS)
-stopwords.update(["SICHERHEITSNUMMER", "SICH GEÄNDERT",
-                  "GEÄNDERT", "GEÄNDERT TIPPE"])
-"""stopwords.update(["DA", "UND", "AUCH", "ICH", "DU", "EIN", "EINE", "EINS", "DIR",
-                  "MIR", "WIR", "DICH", "MICH", "IST", "IM", "UM", "AM", "DER",
-                  "DIE", "DAS", "ER", "DEN", "SIE", "ES", "ABER", "ODER", "MIT",
-                  "NEN", "BIN", "VON", "MEIN", "DEIN", "HAT", "HAST", "DASS",
-                  "WAS", "WO", "WER", "WIE", "WARUM", "WANN", "WEIL", "AUF", "DEM",
-                  "AUS", "FÜR", "NUR", "BIST", "WAR", "VOR", "SIND", "ZU", "AB"])"""
+
+with open("stopwords.txt") as osw:
+    sw = [line.strip(",\n'") for line in osw]
+    sw = [line.upper() for line in sw]
+    sw = [line.split() for line in sw]
+
+stopw = []
+for sublist in sw:
+    for item in sublist:
+        stopw.append(item)
+
+stopwords.update(stopw)
 
 # wordcloud mask from file
 wa_mask = np.array(Image.open("wa_icon.png"))
 
 # Create and generate a wordcloud
-wordcloud = WordCloud(mask=wa_mask, stopwords=stopwords, max_words=500,
+wordcloud = WordCloud(mask=wa_mask, stopwords=None, max_words=500,
                       max_font_size=200, background_color='white', font_path="Roboto_Black.ttf")
 
 wordcloud.generate(text)
@@ -332,12 +335,11 @@ plt.axis("off")
 
 
 # merge pictures
-"""
-merge_image takes three parameters first two parameters specify
-the two images to be merged and third parameter i.e. vertically
-is a boolean type which if True merges images vertically
-and finally saves and returns the file_name
-"""
+
+# merge_image takes three parameters first two parameters specify
+# the two images to be merged and third parameter i.e. vertically
+# is a boolean type which if True merges images vertically
+# and finally saves and returns the file_name
 
 
 def merge_image(img1, img2, vertically):
@@ -383,8 +385,5 @@ current_date = date[-1]
 draw.text(xy=(70, 70), text=("Most frequent words & stats as of: " +
                              current_date), fill=(0, 0, 0), font=font_type)
 image.save("final.png")
-
-print("There are {} words in your chat.".format(len(text)))
-# print("There are {} emojis in your chat.".format(len(specials)))
 
 os.remove("stats.png")
