@@ -30,7 +30,7 @@ while True:
     else:
         break
 
-read_file = reader(opened_file)
+read_file = reader((line.replace("\0", "") for line in opened_file))
 chat = list(read_file)
 chat2 = []
 
@@ -318,7 +318,7 @@ for sublist in sw:
 stopwords.update(stopw)
 
 # wordcloud mask from file
-wa_mask = np.array(Image.open("wa_icon.png"))
+wa_mask = np.array(Image.open("icons/wa_icon.png"))
 
 # Create and generate a wordcloud
 wordcloud = WordCloud(mask=wa_mask, stopwords=None, max_words=500,
