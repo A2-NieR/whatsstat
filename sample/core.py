@@ -289,7 +289,7 @@ class Ui_MainWindow(object):
         func.resize_image(self.imgName)
         self.resized = Image.open("resize.png")
 
-        print(ntpath.basename(str(self.imgName)) + "successfully loaded.")
+        print(ntpath.basename(str(self.imgName)) + " successfully loaded.")
 
         self.signal = True
 
