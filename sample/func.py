@@ -179,3 +179,10 @@ def merge_image(img1, img2, vertically):
 
     new_im.save('stats.png')
     return 'stats.png'
+
+
+def resize_image(img):
+    original_image = Image.open(img)
+    size = (1920, 1920)
+    resized_image = original_image.resize(size)
+    resized_image.save("resize.png")
