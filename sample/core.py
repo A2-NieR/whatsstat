@@ -70,9 +70,9 @@ class Ui_MainWindow(object):
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem2)
         self.gridLayout.addLayout(self.horizontalLayout, 6, 0, 1, 4)
-        self.save_to = QtWidgets.QToolButton(self.centralwidget)
-        self.save_to.setObjectName("save_to")
-        self.gridLayout.addWidget(self.save_to, 5, 3, 1, 1)
+        # self.save_to = QtWidgets.QToolButton(self.centralwidget)
+        # self.save_to.setObjectName("save_to")
+        # self.gridLayout.addWidget(self.save_to, 5, 3, 1, 1)
         self.open_img = QtWidgets.QToolButton(self.centralwidget)
         self.open_img.setObjectName("open_img")
         self.gridLayout.addWidget(self.open_img, 1, 3, 1, 1)
@@ -97,9 +97,9 @@ class Ui_MainWindow(object):
         self.no.setSizePolicy(sizePolicy)
         self.no.setObjectName("no")
         self.gridLayout.addWidget(self.no, 2, 3, 1, 1)
-        self.select_save = QtWidgets.QLabel(self.centralwidget)
-        self.select_save.setObjectName("select_save")
-        self.gridLayout.addWidget(self.select_save, 5, 0, 1, 1)
+        # self.select_save = QtWidgets.QLabel(self.centralwidget)
+        # self.select_save.setObjectName("select_save")
+        # self.gridLayout.addWidget(self.select_save, 5, 0, 1, 1)
         """self.select_size = QtWidgets.QLabel(self.centralwidget)
         self.select_size.setObjectName("select_size")
         self.gridLayout.addWidget(self.select_size, 3, 0, 1, 1)"""
@@ -156,7 +156,7 @@ class Ui_MainWindow(object):
         self.yes.clicked.connect(self.stopW)
         self.no.clicked.connect(self.noStopW)
 
-        self.save_to.clicked.connect(self.saveFile)
+        # self.save_to.clicked.connect(self.saveFile)
 
         self.generate.clicked.connect(self.genFile)
 
@@ -168,11 +168,11 @@ class Ui_MainWindow(object):
         self.select_txt.setText(_translate(
             "MainWindow", "Select exported chat .txt file:"))
         self.generate.setText(_translate("MainWindow", "Generate"))
-        self.save_to.setText(_translate("MainWindow", "..."))
+        # self.save_to.setText(_translate("MainWindow", "..."))
         self.open_img.setText(_translate("MainWindow", "..."))
         self.no.setText(_translate("MainWindow", "No"))
-        self.select_save.setText(_translate(
-            "MainWindow", "Choose save location:"))
+        # self.select_save.setText(_translate(
+        #    "MainWindow", "Choose save location:"))
         # self.select_size.setText(_translate("MainWindow", "Choose size for results:"))
         self.select_img.setText(_translate(
             "MainWindow", "Use custom picture (or leave blank for default)"))
@@ -324,11 +324,16 @@ class Ui_MainWindow(object):
             self.size = 100"""
 
     # TODO save file dialogue
-    def saveFile(self):
-        saveName = QtWidgets.QFileDialog.getSaveFileName(None, "Save File")
+    """def saveFile(self):
+        # folder = QtWidgets.QFileDialog.setDirectory()
+        self.saveName = QtWidgets.QFileDialog.getSaveFileName(
+            None, "Save File", folder + "final.png", "Image Files (*.png *.jpg *.jpeg *.bmp)")"""
 
     # generate final image
     def genFile(self):
+
+        self.progressBar.setValue(1)
+
         print("There are {} words in your chat.".format(len(self.text)))
         # print("There are {} emojis in your chat.".format(len(self.specials)))
 
@@ -341,6 +346,8 @@ class Ui_MainWindow(object):
         plt.ylabel('# of messages')
         plt.title('Busiest days:')
         fig.savefig("days.png", dpi=200)
+
+        self.progressBar.setValue(25)
 
     # Generate & save time line chart
         fig = plt.figure()
@@ -369,6 +376,8 @@ class Ui_MainWindow(object):
 
         print("…")
 
+        self.progressBar.setValue(50)
+
         # TODO stopwords results
         if self.yes.isChecked():
             stop = self.stopwords
@@ -387,6 +396,8 @@ class Ui_MainWindow(object):
                            font_path="Roboto_Black.ttf", max_font_size=150, random_state=42)
 
             wc.generate(self.text)
+
+            self.progressBar.setValue(60)
 
             # create coloring from image
             image_colors = ImageColorGenerator(color_mask)
@@ -420,6 +431,9 @@ class Ui_MainWindow(object):
                                   max_font_size=150, background_color='white', font_path="Roboto_Black.ttf")
 
             wordcloud.generate(self.text)
+
+            self.progressBar.setValue(60)
+
             wordcloud.to_file("wc.png")
 
             plt.imshow(wordcloud, interpolation='bilinear')
@@ -428,6 +442,8 @@ class Ui_MainWindow(object):
             plt.imshow(wa_mask, cmap=plt.cm.gray, interpolation='bilinear')
             plt.axis("off")
 
+        self.progressBar.setValue(70)
+
         func.merge_image("days.png", "times.png", vertically=True)
         func.merge_image("wc.png", "stats.png", vertically=False)
 
@@ -435,6 +451,8 @@ class Ui_MainWindow(object):
         os.remove("times.png")
 
         os.remove("wc.png")
+
+        self.progressBar.setValue(90)
 
     # add current date to top left on final image
         image = Image.open("stats.png")
@@ -445,9 +463,13 @@ class Ui_MainWindow(object):
                                      current_date), fill=(0, 0, 0), font=font_type)
         image.save("final.png")
 
+        location = os.path.abspath("final.png")
+
         os.remove("stats.png")
 
-        print("Done. Enjoy your stats! :)")
+        print("Done. Your final image is located here: " + location)
+
+        self.progressBar.setValue(100)
 
 
 if __name__ == "__main__":
