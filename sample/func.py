@@ -1,7 +1,7 @@
 import re
 import regex
 import emoji
-import datetime
+import datetime as dt
 from PIL import Image
 
 
@@ -132,7 +132,7 @@ wdays = []
 
 def convert_date(dataset):
     for string in dataset:
-        day = datetime.datetime.strptime(string, "%d.%m.%y").strftime("%a")
+        day = dt.datetime.strptime(string, "%d.%m.%y").strftime("%a")
         wdays.append(day)
 
 

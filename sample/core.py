@@ -6,7 +6,7 @@ import jtextfsm as textfsm
 
 # standard + custom libraries
 import os
-import datetime
+import datetime as dt
 from csv import reader
 import ntpath
 import func
@@ -33,7 +33,7 @@ class Stream(QtCore.QObject):
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(500, 350)
+        MainWindow.resize(500, 400)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../icons/whatsstat_48.png"),
                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -42,33 +42,22 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
-        """self.select_size = QtWidgets.QLabel(self.centralwidget)
-        self.select_size.setObjectName("select_size")
-        self.gridLayout.addWidget(self.select_size, 3, 0, 1, 1)
-        self.exp_size = QtWidgets.QComboBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        """self.exp_size = QtWidgets.QComboBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.exp_size.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(self.exp_size.sizePolicy().hasHeightForWidth())
         self.exp_size.setSizePolicy(sizePolicy)
         self.exp_size.setObjectName("exp_size")
         self.exp_size.addItem("")
         self.exp_size.addItem("")
         self.gridLayout.addWidget(self.exp_size, 3, 1, 1, 3)"""
-        self.select_save = QtWidgets.QLabel(self.centralwidget)
-        self.select_save.setObjectName("select_save")
-        self.gridLayout.addWidget(self.select_save, 5, 0, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(
             20, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 2, 1, 1, 1)
-        self.save_to = QtWidgets.QToolButton(self.centralwidget)
-        self.save_to.setObjectName("save_to")
-        self.gridLayout.addWidget(self.save_to, 5, 3, 1, 1)
-        self.select_img = QtWidgets.QLabel(self.centralwidget)
-        self.select_img.setObjectName("select_img")
-        self.gridLayout.addWidget(self.select_img, 1, 0, 1, 1)
+        self.select_txt = QtWidgets.QLabel(self.centralwidget)
+        self.select_txt.setObjectName("select_txt")
+        self.gridLayout.addWidget(self.select_txt, 0, 0, 1, 1)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem1 = QtWidgets.QSpacerItem(
@@ -81,21 +70,12 @@ class Ui_MainWindow(object):
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem2)
         self.gridLayout.addLayout(self.horizontalLayout, 6, 0, 1, 4)
+        # self.save_to = QtWidgets.QToolButton(self.centralwidget)
+        # self.save_to.setObjectName("save_to")
+        # self.gridLayout.addWidget(self.save_to, 5, 3, 1, 1)
         self.open_img = QtWidgets.QToolButton(self.centralwidget)
         self.open_img.setObjectName("open_img")
         self.gridLayout.addWidget(self.open_img, 1, 3, 1, 1)
-        self.no = QtWidgets.QRadioButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.no.sizePolicy().hasHeightForWidth())
-        self.no.setSizePolicy(sizePolicy)
-        self.no.setObjectName("no")
-        self.gridLayout.addWidget(self.no, 2, 3, 1, 1)
-        self.open_txt = QtWidgets.QToolButton(self.centralwidget)
-        self.open_txt.setObjectName("open_txt")
-        self.gridLayout.addWidget(self.open_txt, 0, 3, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.display = QtWidgets.QTextEdit(self.centralwidget)
@@ -107,7 +87,25 @@ class Ui_MainWindow(object):
             QtCore.Qt.TextSelectableByKeyboard | QtCore.Qt.TextSelectableByMouse)
         self.display.setObjectName("display")
         self.horizontalLayout_2.addWidget(self.display)
-        self.gridLayout.addLayout(self.horizontalLayout_2, 7, 0, 1, 4)
+        self.gridLayout.addLayout(self.horizontalLayout_2, 8, 0, 1, 4)
+        self.no = QtWidgets.QRadioButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.no.sizePolicy().hasHeightForWidth())
+        self.no.setSizePolicy(sizePolicy)
+        self.no.setObjectName("no")
+        self.gridLayout.addWidget(self.no, 2, 3, 1, 1)
+        # self.select_save = QtWidgets.QLabel(self.centralwidget)
+        # self.select_save.setObjectName("select_save")
+        # self.gridLayout.addWidget(self.select_save, 5, 0, 1, 1)
+        """self.select_size = QtWidgets.QLabel(self.centralwidget)
+        self.select_size.setObjectName("select_size")
+        self.gridLayout.addWidget(self.select_size, 3, 0, 1, 1)"""
+        self.select_img = QtWidgets.QLabel(self.centralwidget)
+        self.select_img.setObjectName("select_img")
+        self.gridLayout.addWidget(self.select_img, 1, 0, 1, 1)
         self.excl_stopw = QtWidgets.QLabel(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -118,9 +116,6 @@ class Ui_MainWindow(object):
         self.excl_stopw.setSizePolicy(sizePolicy)
         self.excl_stopw.setObjectName("excl_stopw")
         self.gridLayout.addWidget(self.excl_stopw, 2, 0, 1, 1)
-        self.select_txt = QtWidgets.QLabel(self.centralwidget)
-        self.select_txt.setObjectName("select_txt")
-        self.gridLayout.addWidget(self.select_txt, 0, 0, 1, 1)
         self.yes = QtWidgets.QRadioButton(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
@@ -130,6 +125,13 @@ class Ui_MainWindow(object):
         self.yes.setSizePolicy(sizePolicy)
         self.yes.setObjectName("yes")
         self.gridLayout.addWidget(self.yes, 2, 2, 1, 1)
+        self.open_txt = QtWidgets.QToolButton(self.centralwidget)
+        self.open_txt.setObjectName("open_txt")
+        self.gridLayout.addWidget(self.open_txt, 0, 3, 1, 1)
+        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setObjectName("progressBar")
+        self.gridLayout.addWidget(self.progressBar, 7, 0, 1, 4)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 500, 29))
@@ -154,32 +156,30 @@ class Ui_MainWindow(object):
         self.yes.clicked.connect(self.stopW)
         self.no.clicked.connect(self.noStopW)
 
-        self.save_to.clicked.connect(self.saveFile)
+        # self.save_to.clicked.connect(self.saveFile)
 
         self.generate.clicked.connect(self.genFile)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "WhatsStat"))
-        # self.select_size.setText(_translate(
-        #    "MainWindow", "Choose size for results:"))
-        # self.exp_size.setItemText(
-        #    0, _translate("MainWindow", "3200 x 1920 px"))
+        # self.exp_size.setItemText(0, _translate("MainWindow", "3200 x 1920 px"))
         # self.exp_size.setItemText(1, _translate("MainWindow", "1600 x 960 px"))
-        self.select_save.setText(_translate(
-            "MainWindow", "Choose save location:"))
-        self.save_to.setText(_translate("MainWindow", "..."))
-        self.select_img.setText(_translate(
-            "MainWindow", "Use custom square picture (or leave blank for default)"))
-        self.generate.setText(_translate("MainWindow", "Generate"))
-        self.open_img.setText(_translate("MainWindow", "..."))
-        self.no.setText(_translate("MainWindow", "No"))
-        self.open_txt.setText(_translate("MainWindow", "..."))
-        self.excl_stopw.setText(_translate(
-            "MainWindow", "Exclude most common words? (I, You, and… etc.)"))
         self.select_txt.setText(_translate(
             "MainWindow", "Select exported chat .txt file:"))
+        self.generate.setText(_translate("MainWindow", "Generate"))
+        # self.save_to.setText(_translate("MainWindow", "..."))
+        self.open_img.setText(_translate("MainWindow", "..."))
+        self.no.setText(_translate("MainWindow", "No"))
+        # self.select_save.setText(_translate(
+        #    "MainWindow", "Choose save location:"))
+        # self.select_size.setText(_translate("MainWindow", "Choose size for results:"))
+        self.select_img.setText(_translate(
+            "MainWindow", "Use custom picture (or leave blank for default)"))
+        self.excl_stopw.setText(_translate(
+            "MainWindow", "Exclude most common words? (I, You, and… etc.)"))
         self.yes.setText(_translate("MainWindow", "Yes"))
+        self.open_txt.setText(_translate("MainWindow", "..."))
 
 # Functions for ui interactions
     # output of console messages in QTextEdit box
@@ -273,7 +273,7 @@ class Ui_MainWindow(object):
         self.t_time = []
 
         for item in t_key:
-            item = datetime.datetime.strptime(item, "%H:%M").time()
+            item = dt.datetime.strptime(item, "%H:%M").time()
             self.t_time.append(item)
 
         self.signal = False
@@ -286,8 +286,8 @@ class Ui_MainWindow(object):
         # BUG When not choosing a file: AttributeError: 'str' object has no attribute 'read'
 
         # TODO if image is 1920x1920 don't resize
-        func.resize_image(self.imgName)
-        self.resized = Image.open("resize.png")
+        """func.resize_image(self.imgName)
+        self.resized = Image.open("resize.png")"""
 
         print(ntpath.basename(str(self.imgName)) + " successfully loaded.")
 
@@ -324,11 +324,16 @@ class Ui_MainWindow(object):
             self.size = 100"""
 
     # TODO save file dialogue
-    def saveFile(self):
-        saveName = QtWidgets.QFileDialog.getSaveFileName(None, "Save File")
+    """def saveFile(self):
+        # folder = QtWidgets.QFileDialog.setDirectory()
+        self.saveName = QtWidgets.QFileDialog.getSaveFileName(
+            None, "Save File", folder + "final.png", "Image Files (*.png *.jpg *.jpeg *.bmp)")"""
 
     # generate final image
     def genFile(self):
+
+        self.progressBar.setValue(1)
+
         print("There are {} words in your chat.".format(len(self.text)))
         # print("There are {} emojis in your chat.".format(len(self.specials)))
 
@@ -342,6 +347,8 @@ class Ui_MainWindow(object):
         plt.title('Busiest days:')
         fig.savefig("days.png", dpi=200)
 
+        self.progressBar.setValue(25)
+
     # Generate & save time line chart
         fig = plt.figure()
 
@@ -353,20 +360,13 @@ class Ui_MainWindow(object):
         pl.title("Busiest times:")
         ax = plt.gca()
         # OPTIMIZE: set x-axis to 0-24h
-        hours = [datetime.time(0, 0), datetime.time(1, 0), datetime.time(2, 0),
-                 datetime.time(3, 0), datetime.time(4, 0), datetime.time(5, 0),
-                 datetime.time(6, 0), datetime.time(7, 0), datetime.time(8, 0),
-                 datetime.time(9, 0), datetime.time(
-                     10, 0), datetime.time(11, 0),
-                 datetime.time(12, 0), datetime.time(
-                     13, 0), datetime.time(14, 0),
-                 datetime.time(15, 0), datetime.time(
-                     16, 0), datetime.time(17, 0),
-                 datetime.time(18, 0), datetime.time(
-                     19, 0), datetime.time(20, 0),
-                 datetime.time(21, 0), datetime.time(
-                     22, 0), datetime.time(23, 0),
-                 datetime.time(23, 59)]
+        hours = [dt.time(0, 0), dt.time(1, 0), dt.time(2, 0), dt.time(3, 0),
+                 dt.time(4, 0), dt.time(5, 0), dt.time(6, 0), dt.time(7, 0),
+                 dt.time(8, 0), dt.time(9, 0), dt.time(10, 0), dt.time(11, 0),
+                 dt.time(12, 0), dt.time(13, 0), dt.time(14, 0), dt.time(15, 0),
+                 dt.time(16, 0), dt.time(17, 0), dt.time(18, 0), dt.time(19, 0),
+                 dt.time(20, 0), dt.time(21, 0), dt.time(22, 0), dt.time(23, 0),
+                 dt.time(23, 59)]
 
         ax.set_xticks(hours)
         plt.xticks(fontsize=7)
@@ -374,7 +374,9 @@ class Ui_MainWindow(object):
         plt.plot(x, y, linewidth=0.5)
         fig.savefig("times.png", dpi=200)
 
-        print("Generating Wordcloud & Charts. Please wait…")
+        print("…")
+
+        self.progressBar.setValue(50)
 
         # TODO stopwords results
         if self.yes.isChecked():
@@ -383,6 +385,9 @@ class Ui_MainWindow(object):
             stop = self.no_stopwords
 
         if self.signal is True:
+            # TODO if image is 1920x1920 don't resize
+            func.resize_image(self.imgName)
+            self.resized = Image.open("resize.png")
             # colored wordcloud with custom image
             color_mask = np.array(self.resized)
 
@@ -391,6 +396,8 @@ class Ui_MainWindow(object):
                            font_path="Roboto_Black.ttf", max_font_size=150, random_state=42)
 
             wc.generate(self.text)
+
+            self.progressBar.setValue(60)
 
             # create coloring from image
             image_colors = ImageColorGenerator(color_mask)
@@ -424,6 +431,9 @@ class Ui_MainWindow(object):
                                   max_font_size=150, background_color='white', font_path="Roboto_Black.ttf")
 
             wordcloud.generate(self.text)
+
+            self.progressBar.setValue(60)
+
             wordcloud.to_file("wc.png")
 
             plt.imshow(wordcloud, interpolation='bilinear')
@@ -431,6 +441,8 @@ class Ui_MainWindow(object):
             plt.figure()
             plt.imshow(wa_mask, cmap=plt.cm.gray, interpolation='bilinear')
             plt.axis("off")
+
+        self.progressBar.setValue(70)
 
         func.merge_image("days.png", "times.png", vertically=True)
         func.merge_image("wc.png", "stats.png", vertically=False)
@@ -440,18 +452,24 @@ class Ui_MainWindow(object):
 
         os.remove("wc.png")
 
+        self.progressBar.setValue(90)
+
     # add current date to top left on final image
         image = Image.open("stats.png")
-        font_type = ImageFont.truetype("Roboto_Black.ttf", 20)
+        font_type = ImageFont.truetype("Roboto_Black.ttf", 24)
         draw = ImageDraw.Draw(image)
         current_date = func.date[-1]
         draw.text(xy=(70, 70), text=("Most frequent words & stats as of: " +
                                      current_date), fill=(0, 0, 0), font=font_type)
         image.save("final.png")
 
+        location = os.path.abspath("final.png")
+
         os.remove("stats.png")
 
-        print("Done. Enjoy your stats! :)")
+        print("Done. Your final image is located here: " + location)
+
+        self.progressBar.setValue(100)
 
 
 if __name__ == "__main__":
