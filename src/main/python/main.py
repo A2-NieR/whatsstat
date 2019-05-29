@@ -3,6 +3,7 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import jtextfsm as textfsm
+from fbs_runtime.application_context import ApplicationContext
 
 # standard + custom libraries
 import os
@@ -35,7 +36,7 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(500, 400)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../icons/whatsstat_48.png"),
+        icon.addPixmap(QtGui.QPixmap("../icons/base/32.png"),
                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -43,7 +44,8 @@ class Ui_MainWindow(object):
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
         """self.exp_size = QtWidgets.QComboBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.exp_size.sizePolicy().hasHeightForWidth())
@@ -162,7 +164,8 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "WhatsStat"))
+        MainWindow.setWindowTitle(_translate(
+            "MainWindow", "WhatsStat – Chat Analyzer"))
         # self.exp_size.setItemText(0, _translate("MainWindow", "3200 x 1920 px"))
         # self.exp_size.setItemText(1, _translate("MainWindow", "1600 x 960 px"))
         self.select_txt.setText(_translate(
@@ -297,7 +300,7 @@ class Ui_MainWindow(object):
     def stopW(self):
         self.stopwords = set(STOPWORDS)
 
-        with open("stopwords.txt") as osw:
+        with open("../../../data/stopwords.txt") as osw:
             sw = [line.strip(",\n'") for line in osw]
             sw = [line.upper() for line in sw]
             sw = [line.split() for line in sw]
@@ -393,7 +396,7 @@ class Ui_MainWindow(object):
 
             # IDEA Maybe let user choose from a handful of fonts + max_words, fontsize, etc.
             wc = WordCloud(mask=color_mask, stopwords=stop, max_words=500, background_color='white',
-                           font_path="Roboto_Black.ttf", max_font_size=150, random_state=42)
+                           font_path="../../../data/Roboto_Black.ttf", max_font_size=150, random_state=42)
 
             wc.generate(self.text)
 
@@ -422,13 +425,14 @@ class Ui_MainWindow(object):
             os.remove("resize.png")
 
         else:
-            print("Wordcloud with default image.")
+            print("Generating Wordcloud with default image.")
             # wordcloud mask from file
-            wa_mask = np.array(Image.open("../icons/wa_icon.png"))
+            wa_mask = np.array(Image.open("../../../data/wa_mask.png"))
 
             # Create and generate a wordcloud
             wordcloud = WordCloud(mask=wa_mask, stopwords=stop, max_words=500,
-                                  max_font_size=150, background_color='white', font_path="Roboto_Black.ttf")
+                                  max_font_size=150, background_color='white',
+                                  font_path="../../../data/Roboto_Black.ttf", random_state=42)
 
             wordcloud.generate(self.text)
 
@@ -456,7 +460,7 @@ class Ui_MainWindow(object):
 
     # add current date to top left on final image
         image = Image.open("stats.png")
-        font_type = ImageFont.truetype("Roboto_Black.ttf", 24)
+        font_type = ImageFont.truetype("../../../data/Roboto_Black.ttf", 24)
         draw = ImageDraw.Draw(image)
         current_date = func.date[-1]
         draw.text(xy=(70, 70), text=("Most frequent words & stats as of: " +
@@ -473,9 +477,12 @@ class Ui_MainWindow(object):
 
 
 if __name__ == "__main__":
+    appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    sys.exit(app.exec_())
+    # sys.exit(app.exec_())
+    exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
+    sys.exit(exit_code)
