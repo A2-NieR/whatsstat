@@ -396,7 +396,7 @@ class Ui_MainWindow(object):
 
             # IDEA Maybe let user choose from a handful of fonts + max_words, fontsize, etc.
             wc = WordCloud(mask=color_mask, stopwords=stop, max_words=500, background_color='white',
-                           font_path="../../../data/Roboto_Black.ttf", max_font_size=150, random_state=42)
+                           font_path="../../../data/Roboto_Black.ttf")
 
             wc.generate(self.text)
 
@@ -431,8 +431,7 @@ class Ui_MainWindow(object):
 
             # Create and generate a wordcloud
             wordcloud = WordCloud(mask=wa_mask, stopwords=stop, max_words=500,
-                                  max_font_size=150, background_color='white',
-                                  font_path="../../../data/Roboto_Black.ttf", random_state=42)
+                                  background_color='white', font_path="../../../data/Roboto_Black.ttf")
 
             wordcloud.generate(self.text)
 

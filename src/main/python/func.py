@@ -89,13 +89,14 @@ messages_final = []
 
 
 def remove_nonletters(dataset):
+    junk = ("http", "Medien ausgeschlossen" "Die Sicherheitsnummer",
+            "Nachrichten, die", "Messages you send", "Media omitted")
     for row in dataset:
         regex = re.compile('[^a-zA-ZäöüÄÖÜß]')
         words = (regex.sub(' ', row))
         words = words.strip()
-        # remove empty items, urls & <media excluded> message
-# TODO: Add international no media messages
-        if words == "" or words.startswith("http") or words == "Medien ausgeschlossen":
+        # remove empty items, urls & (security code) notification messages
+        if words == "" or words.startswith(junk) or "security code" in words:
             continue
         else:
             messages_final.append(words)
@@ -132,7 +133,10 @@ wdays = []
 
 def convert_date(dataset):
     for string in dataset:
-        day = dt.datetime.strptime(string, "%d.%m.%y").strftime("%a")
+        try:
+            day = dt.datetime.strptime(string, "%d.%m.%y").strftime("%a")
+        except:
+            day = dt.datetime.strptime(string, "%m/%d/%y").strftime("%a")
         wdays.append(day)
 
 
