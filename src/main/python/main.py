@@ -2,7 +2,6 @@
 # libraries for UI
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-import jtextfsm as textfsm
 from fbs_runtime.application_context import ApplicationContext
 
 # standard + custom libraries
@@ -344,7 +343,7 @@ class Ui_MainWindow(object):
         y_pos = np.arange(len(func.d_count))
 
         fig = plt.figure()
-        plt.bar(y_pos, self.d_perf, align="center", alpha=0.5)
+        plt.bar(y_pos, self.d_perf, align="center", alpha=0.5, color="green")
         plt.xticks(y_pos, self.d_obj)
         plt.ylabel('# of messages')
         plt.title('Busiest days:')
@@ -374,7 +373,7 @@ class Ui_MainWindow(object):
         ax.set_xticks(hours)
         plt.xticks(fontsize=7)
         plt.gcf().autofmt_xdate()
-        plt.plot(x, y, linewidth=0.5)
+        plt.plot(x, y, linewidth=0.5, color="green")
         fig.savefig("times.png", dpi=200)
 
         print("…")
@@ -435,9 +434,11 @@ class Ui_MainWindow(object):
 
             wordcloud.generate(self.text)
 
-            self.progressBar.setValue(60)
+            self.progressBar.setValue(65)
 
             wordcloud.to_file("wc.png")
+
+            self.progressBar.setValue(70)
 
             plt.imshow(wordcloud, interpolation='bilinear')
             plt.axis("off")
@@ -445,24 +446,25 @@ class Ui_MainWindow(object):
             plt.imshow(wa_mask, cmap=plt.cm.gray, interpolation='bilinear')
             plt.axis("off")
 
-        self.progressBar.setValue(70)
+        self.progressBar.setValue(75)
 
         func.merge_image("days.png", "times.png", vertically=True)
         func.merge_image("wc.png", "stats.png", vertically=False)
 
+        self.progressBar.setValue(80)
+
         os.remove("days.png")
         os.remove("times.png")
-
         os.remove("wc.png")
 
         self.progressBar.setValue(90)
 
     # add current date to top left on final image
         image = Image.open("stats.png")
-        font_type = ImageFont.truetype("../../../data/Roboto_Black.ttf", 24)
+        font_type = ImageFont.truetype("../../../data/Roboto_Black.ttf", 26)
         draw = ImageDraw.Draw(image)
         current_date = func.date[-1]
-        draw.text(xy=(70, 70), text=("Most frequent words & stats as of: " +
+        draw.text(xy=(50, 50), text=("Most frequent words & stats as of " +
                                      current_date), fill=(0, 0, 0), font=font_type)
         image.save("final.png")
 

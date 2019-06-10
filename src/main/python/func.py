@@ -89,8 +89,8 @@ messages_final = []
 
 
 def remove_nonletters(dataset):
-    junk = ("http", "Medien ausgeschlossen" "Die Sicherheitsnummer",
-            "Nachrichten, die", "Messages you send", "Media omitted")
+    junk = ("http", "Medien ausgeschlossen", "Die Sicherheitsnummer", "Sicherheitsnummer von", "ausgeschlossen Medien",
+            "Nachrichten, die", "diese Nachricht", "Messages you send", "Media omitted", "omitted Media")
     for row in dataset:
         regex = re.compile('[^a-zA-ZäöüÄÖÜß]')
         words = (regex.sub(' ', row))
