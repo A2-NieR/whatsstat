@@ -6,39 +6,34 @@ from PIL import Image
 
 
 # store lines with messages only in separate list
-chat_with_date = []
-chat_without_date = []
-
-
 def extract_nodate(database):
+    chat_with_date = []
+    chat_without_date = []
     for row in database:
         if len(row) == 1:
             chat_without_date.append(row)
         else:
             chat_with_date.append(row)
+    return chat_without_date, chat_with_date
 
 
 # remove "., .., ..." from message only list + store in new list
-msg_only = []
-
-
 def clean_nodate(dataset):
+    msg_only = []
     for row in dataset:
-        # row = list(row)
         for i in row:
             if i.startswith("."):
                 continue
             else:
                 msg_only.append(row)
+    return msg_only
 
 
 # store items in separate lists & remove names
-date = []
-clock = []
-msg = []
-
-
 def pull(dataset):
+    date = []
+    clock = []
+    msg = []
     for row in dataset:
         row = list(row)
         # pull dates only in list, send other items to msg
@@ -60,37 +55,34 @@ def pull(dataset):
             name = ""
         item = item.replace(name, "")
         msg.append(item[7:])
+    return date, clock, msg
 
 
 # extract msg_only words into list
-msg_open = []
-
-
 def open_list(dataset):
+    msg_open = []
     for row in dataset:
         row = row[0]
         msg_open.append(row)
+    return msg_open
 
 
 # pull emojis in separate list
-ems = []
-
-
 def extract_emojis(database):
+    ems = []
     for row in database:
         text = regex.findall(r'\X', row)
         for word in text:
             if any(char in emoji.UNICODE_EMOJI for char in word):
                 ems.append(word)
+    return ems
 
 
 # remove emojis, numbers, special characters & strip whitespace
-messages_final = []
-
-
 def remove_nonletters(dataset):
+    msgs_final = []
     junk = ("http", "Medien ausgeschlossen", "Die Sicherheitsnummer", "Sicherheitsnummer von", "ausgeschlossen Medien",
-            "Nachrichten, die", "diese Nachricht", "Messages you send", "Media omitted", "omitted Media")
+            "Nachrichten", "diese Nachricht", "Messages you send", "Media omitted", "omitted Media")
     for row in dataset:
         regex = re.compile('[^a-zA-ZäöüÄÖÜß]')
         words = (regex.sub(' ', row))
@@ -99,24 +91,22 @@ def remove_nonletters(dataset):
         if words == "" or words.startswith(junk) or "security code" in words:
             continue
         else:
-            messages_final.append(words)
+            msgs_final.append(words)
+    return msgs_final
 
 
 # Captain Caps to the rescue! Make everything WAMBO!
-cpt_caps = []
-
-
 def caps(dataset):
+    cpt_caps = []
     for item in dataset:
         cap = item.upper()
         cpt_caps.append(cap)
+    return cpt_caps
 
 
 # pull every word into separate list
-single_words = []
-
-
 def singled(dataset):
+    single_words = []
     for item in dataset:
         item = item.split()
         for i in item:
@@ -125,30 +115,30 @@ def singled(dataset):
                 continue
             else:
                 single_words.append(i)
+    return single_words
 
 
 # convert dates into weekdays
-wdays = []
-
-
 def convert_date(dataset):
+    wdays = []
     for string in dataset:
         try:
             day = dt.datetime.strptime(string, "%d.%m.%y").strftime("%a")
         except:
             day = dt.datetime.strptime(string, "%m/%d/%y").strftime("%a")
         wdays.append(day)
+    return wdays
 
 
 # create weekdays dictionary
-d_count = {}
-
-
-def sort_days(dataset, nameofday):
-    for day in dataset:
-        if day.startswith(nameofday):
-            d_count.setdefault(day, 0)
-            d_count[day] = d_count[day] + 1
+def sort_days(dataset, week):
+    d_count = {}
+    for nameofday in week:
+        for day in dataset:
+            if day.startswith(nameofday):
+                d_count.setdefault(day, 0)
+                d_count[day] = d_count[day] + 1
+    return d_count
 
 
 # merge pictures

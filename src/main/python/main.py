@@ -195,6 +195,8 @@ class Ui_MainWindow(object):
     def __del__(self):
         sys.stdout = sys.__stdout__
 
+    # main script starts here:
+
     # open chat textfile
     def setChat(self):
         # filter prevents from returning file as tuple
@@ -218,53 +220,47 @@ class Ui_MainWindow(object):
         # chat_header = chat_full[0]
         chat_main = chat_full[1:]
 
-        func.extract_nodate(chat_main)
-        func.clean_nodate(func.chat_without_date)
-        func.pull(func.chat_with_date)
-        func.open_list(func.msg_only)
+        without_date, with_date = func.extract_nodate(chat_main)
+        msg_only = func.clean_nodate(without_date)
+        self.date, clock, msg = func.pull(with_date)
+        msg_open = func.open_list(msg_only)
 
     # merge messages into one file
-        msgs = func.msg + func.msg_open
+        msgs = msg + msg_open
 
         # TODO: Find a way to use the extracted emojis
-        func.extract_emojis(msgs)
-        func.remove_nonletters(msgs)
+        ems = func.extract_emojis(msgs)
+        msgs_final = func.remove_nonletters(msgs)
 
-        func.caps(func.messages_final)
-        func.singled(func.cpt_caps)
+        wambo = func.caps(msgs_final)
+        single_words = func.singled(wambo)
 
-        self.text = " ".join(func.single_words)
-        # self.special = " ".join(func.ems)
+        self.text = " ".join(single_words)
+        # self.special = " ".join(ems)
         # self.specials = special.encode('utf-8')
 
-        func.convert_date(func.date)
+        wdays = func.convert_date(self.date)
         # convert self.t_time(time)
 
     # sort dates & times + create dictionaries
-        func.sort_days(func.wdays, "Mon")
-        func.sort_days(func.wdays, "Tue")
-        func.sort_days(func.wdays, "Wed")
-        func.sort_days(func.wdays, "Thu")
-        func.sort_days(func.wdays, "Fri")
-        func.sort_days(func.wdays, "Sat")
-        func.sort_days(func.wdays, "Sun")
+        self.d_count = func.sort_days(wdays, ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"))
 
     # extract keys&values from weekdays dictionary
         self.d_obj = []
         self.d_perf = []
 
-        for k in func.d_count.keys():
+        for k in self.d_count.keys():
             self.d_obj.append(k)
 
-        for n in func.d_count.values():
+        for n in self.d_count.values():
             self.d_perf.append(n)
 
     # extract keys&values from dictionary (from extracted times)
         t_count = {}
 
-        func.clock.sort()
+        clock.sort()
 
-        for t in func.clock:
+        for t in clock:
             t_count.setdefault(t, 0)
             t_count[t] = t_count[t] + 1
 
@@ -340,7 +336,7 @@ class Ui_MainWindow(object):
         # print("There are {} emojis in your chat.".format(len(self.specials)))
 
     # Generate & save weekdays bar chart
-        y_pos = np.arange(len(func.d_count))
+        y_pos = np.arange(len(self.d_count))
 
         fig = plt.figure()
         plt.bar(y_pos, self.d_perf, align="center", alpha=0.5, color="green")
@@ -463,7 +459,7 @@ class Ui_MainWindow(object):
         image = Image.open("stats.png")
         font_type = ImageFont.truetype("../../../data/Roboto_Black.ttf", 26)
         draw = ImageDraw.Draw(image)
-        current_date = func.date[-1]
+        current_date = self.date[-1]
         draw.text(xy=(50, 50), text=("Most frequent words & stats as of " +
                                      current_date), fill=(0, 0, 0), font=font_type)
         image.save("final.png")
