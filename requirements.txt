@@ -42,9 +42,9 @@ openssl=1.1.1b=h7b6447c_1
 pandas=0.24.2=py37he6710b0_0
 pcre=8.43=he6710b0_0
 pefile=2019.4.18=pypi_0
-pillow=6.0.0=pypi_0
+pillow=6.2.2=pypi_0
 pip=19.1.1=py37_0
-pyinstaller=3.4=pypi_0
+pyinstaller=3.6=pypi_0
 pyparsing=2.4.0=py_0
 pyqt=5.9.2=py37h05f1152_2
 python=3.7.3=h0371630_0
